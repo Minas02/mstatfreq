@@ -22,6 +22,8 @@ def dist_squared(a, b):
     return np.sum(np.square(a - b))
 
 def set_labels_as_closest_cluster(data, labels, clusters):
+    changed_count = 0
+
     for i, point in enumerate(data):
         closest_dist = dist_squared(point, clusters[0])
         closest_index = 0
@@ -33,7 +35,12 @@ def set_labels_as_closest_cluster(data, labels, clusters):
                 closest_dist = dist
                 closest_index = j
 
+        if labels[i] != closest_index:
+            changed_count += 1
+
         labels[i] = closest_index
+
+    return changed_count
 
 def get_barycenters_of_labels(data, labels, clusters):
     barycenters = np.zeros(clusters.shape)
@@ -43,12 +50,10 @@ def get_barycenters_of_labels(data, labels, clusters):
         barycenters[label] += data[i]
         occurences[label] += 1
 
-    distances = np.zeros(len(clusters), dtype=float)
     for i in range(len(barycenters)):
         barycenters[i] /= occurences[i]
-        distances[i] = dist_squared(barycenters[i], clusters[i])
 
-    return barycenters, distances
+    return barycenters
 
 
 if __name__ == "__main__":
@@ -61,15 +66,13 @@ if __name__ == "__main__":
 
     clusters = data[np.random.choice(len(data), size=4, replace=False)] # y
 
-    i = 0
-    while True:
-        set_labels_as_closest_cluster(data, labels, clusters)
-        clusters, distances = get_barycenters_of_labels(data, labels, clusters)
-        max_dist = np.max(distances)
-        print("k-means ite n°", i, " - ", max_dist, sep='')
-        if max_dist < 1e-5:
-            break
-        i += 1
+    ite = 0
+    updated_labels_count = set_labels_as_closest_cluster(data, labels, clusters)
+    while updated_labels_count > 0:
+        clusters = get_barycenters_of_labels(data, labels, clusters)
+        print("k-means ite n°", ite, " - ", , sep='')
+        ite += 1
+        updated_labels_count = set_labels_as_closest_cluster(data, labels, clusters)
 
     show_classification(data, labels, clusters)
 
