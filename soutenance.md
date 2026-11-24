@@ -16,8 +16,11 @@ quel patch on veut check
 le patch passé en paramètre
 
 `efros_leung`:
+- le padding de l'image est la moitié de la taille d'un patch
 - 
 
 `main`:
 - 
+
+# Classification
 

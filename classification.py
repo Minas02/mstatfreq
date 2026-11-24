@@ -252,12 +252,11 @@ if __name__ == "__main__":
 
     classes_count = len(img_numbers)
 
+    results = []
     for patch_size in [32, 64]:
         do_patches, do_labels, _, _ = build_do_and_dt(
             img_numbers, patch_size=patch_size
         )
-
-        results = []
 
         for theta in [4, 6, 8, 10]:
             model = fit_classifier(do_patches, do_labels, classes_count, theta)
