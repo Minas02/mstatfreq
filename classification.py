@@ -240,8 +240,16 @@ def blur_patches(patches, radius):
 
 if __name__ == "__main__":
     # k_means_2D_test(clusters_count=3)
+    # pass
 
-    img_numbers = [95, 75, 69, 40, 5]
+    img_numbers = [95, 75, 69, 46, 5]
+    images = [load_img_as_grayscale(img) for img in img_numbers]
+    fig, axes = plt.subplots(1, len(images), figsize=(15, 3))
+    for ax, image, number in zip(axes, images, img_numbers):
+        ax.imshow(image, cmap="gray", vmin=0, vmax=255)
+        ax.set_title(f"D{number}")
+        ax.axis("off")
+
     classes_count = len(img_numbers)
 
     for patch_size in [32, 64]:

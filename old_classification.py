@@ -3,6 +3,8 @@
 # Here is the exact prompt "Can you rewrite the following functions using numpy to optimize them"
 # followed by the 3 following functions:
 
+import numpy as np
+
 
 def dist_squared(a, b):
     return np.sum(np.square(a - b))
