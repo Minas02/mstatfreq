@@ -280,14 +280,14 @@ if __name__ == "__main__":
     prediction = predict(model, dt_patches)
     confusion_matrix = calculate_confusion_matrix(dt_labels, prediction, classes_count)
     print(f"Precision on DT: {accuracy(dt_labels, prediction):.3f}")
-    print("Confusion matrix:\n", confusion_matrix)
+    print("Confusion Matrix:\n", confusion_matrix)
 
     plt.figure()
     plt.imshow(confusion_matrix)
     plt.colorbar()
-    plt.xlabel("Predicted Class")
-    plt.ylabel("Actual Class")
-    plt.title("Confusion Matrix")
+    plt.xlabel("Prédiction")
+    plt.ylabel("Originale")
+    plt.title("Matrice de confusion")
     for i in range(classes_count):
         for j in range(classes_count):
             plt.text(j, i, confusion_matrix[i, j], ha="center", va="center")
@@ -295,10 +295,10 @@ if __name__ == "__main__":
 
     # Test robustness agains noise and blur
     sigmas = [0, 5, 10, 20, 30, 50]
-    radiuses = [0, 0.5, 1, 1.5, 2, 3]
     accuracy_noise = [
         accuracy(dt_labels, predict(model, add_noise(dt_patches, s))) for s in sigmas
     ]
+    radiuses = [0, 0.5, 1, 1.5, 2, 3]
     accuracy_blur = [
         accuracy(dt_labels, predict(model, blur_patches(dt_patches, r)))
         for r in radiuses
@@ -307,13 +307,13 @@ if __name__ == "__main__":
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
 
     ax1.plot(sigmas, accuracy_noise, "o-")
-    ax1.set_xlabel("Standard deviation of gaussian blue")
-    ax1.set_ylabel("Precision on DT")
-    ax1.set_title("Robustness to noise")
+    ax1.set_xlabel("Ecart-type du bruit gaussien (niveaux de gris)")
+    ax1.set_ylabel("Précision sur DT")
+    ax1.set_title("Robustesse au bruit")
 
     ax2.plot(radiuses, accuracy_blur, "o-")
-    ax2.set_xlabel("radius of gaussian blur (pixels)")
-    ax2.set_title("Robustness to blur")
+    ax2.set_xlabel("Rayon du flou gaussien (pixels)")
+    ax2.set_title("Robustesse au flou")
 
     plt.tight_layout()
     plt.savefig("robustness.png", dpi=150)
